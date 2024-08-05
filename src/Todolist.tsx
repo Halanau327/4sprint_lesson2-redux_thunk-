@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import { Delete } from '@mui/icons-material';
 import {Task} from './Task'
 import {TaskStatuses, TaskType} from './api(dall)/todolists-api'
-import {FilterValuesType, getTodosThunk} from './state(bll)/todolists-reducer'
+import {FilterValuesType} from './state(bll)/todolists-reducer'
 import {getTasksTC} from "./state(bll)/tasks-reducer";
 import {useAppDispatch} from "./state(bll)/store";
 

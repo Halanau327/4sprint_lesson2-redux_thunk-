@@ -12,24 +12,22 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {Menu} from '@mui/icons-material';
 import {
-    addTodolistAC,
+    addTodolistAC, addTodolistTC,
     changeTodolistFilterAC,
     changeTodolistTitleAC,
     FilterValuesType, getTodosThunk,
-    removeTodolistAC, setTodosAC,
+    removeTodolistAC, removeTodolistTC,
     TodolistDomainType
 } from './state(bll)/todolists-reducer'
 import {
-    addTaskAC,
     addTaskTC,
-    changeTaskStatusAC,
     changeTaskTitleAC,
     deleteTaskTC,
-    removeTaskAC, updateTaskTC
+    updateTaskTC
 } from './state(bll)/tasks-reducer';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType, ThunkDispatchType, useAppDispatch} from './state(bll)/store';
-import {TaskStatuses, TaskType, todolistsAPI} from './api(dall)/todolists-api'
+import {useSelector} from 'react-redux';
+import {AppRootStateType, useAppDispatch} from './state(bll)/store';
+import {TaskStatuses, TaskType} from './api(dall)/todolists-api'
 
 
 export type TasksStateType = {
@@ -37,6 +35,10 @@ export type TasksStateType = {
 }
 
 function App() {
+
+    useEffect(() => {
+        dispatch(getTodosThunk)
+    }, []);
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
@@ -65,8 +67,7 @@ function App() {
     }, []);
 
     const removeTodolist = useCallback(function (id: string) {
-        const action = removeTodolistAC(id);
-        dispatch(action);
+        dispatch(removeTodolistTC(id))
     }, []);
 
     const changeTodolistTitle = useCallback(function (id: string, title: string) {
@@ -75,13 +76,10 @@ function App() {
     }, []);
 
     const addTodolist = useCallback((title: string) => {
-        const action = addTodolistAC(title);
-        dispatch(action);
+        dispatch(addTodolistTC(title))
     }, [dispatch]);
 
-    useEffect(() => {
-        dispatch(getTodosThunk)
-    }, []);
+
 
     return (
         <div className="App">
