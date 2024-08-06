@@ -2,7 +2,7 @@ import {TasksStateType} from '../App';
 import {AddTodolistActionType, RemoveTodolistActionType, SetTodosType} from './todolists-reducer';
 import {TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../api(dall)/todolists-api'
 import {Dispatch} from "redux";
-import {AppRootStateType} from "./store";
+import {AppActionsType, AppRootStateType} from "./store";
 
 export type RemoveTaskActionType = {
     type: 'REMOVE-TASK',
@@ -29,7 +29,7 @@ export type ChangeTaskTitleActionType = {
     title: string
 }
 
-type ActionsType =
+export type TasksActionsType =
     RemoveTaskActionType
     | AddTaskActionType
     | ChangeTaskStatusActionType
@@ -59,7 +59,7 @@ const initialState: TasksStateType = {
 
 }
 
-export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
+export const tasksReducer = (state: TasksStateType = initialState, action: TasksActionsType): TasksStateType => {
     switch (action.type) {
         case 'SET-TASKS': {
             return {
@@ -135,21 +135,21 @@ export const changeTaskTitleAC = (taskId: string, title: string, todolistId: str
 export const setTasksAC = (todoId: string, tasks: TaskType[]) => ({type: 'SET-TASKS', tasks, todoId} as const)
 
 
-export const getTasksTC = (todoId: string) => (dispatch: Dispatch) => {
+export const getTasksTC = (todoId: string) => (dispatch: Dispatch<AppActionsType>) => {
     todolistsAPI.getTasks(todoId)
         .then(res => {
             dispatch(setTasksAC(todoId, res.data.items))
         })
 }
 
-export const addTaskTC = (todoId: string, title: string) => (dispatch: Dispatch) => {
+export const addTaskTC = (todoId: string, title: string) => (dispatch: Dispatch<AppActionsType>) => {
     todolistsAPI.createTask(todoId, title)
         .then(res => {
             dispatch(addTaskAC(res.data.data.item))
         })
 }
 
-export const deleteTaskTC = (todoId: string, taskId: string) => (dispatch: Dispatch) => {
+export const deleteTaskTC = (todoId: string, taskId: string) => (dispatch: Dispatch<AppActionsType>) => {
     todolistsAPI.deleteTask(todoId, taskId)
         .then(res => {
             dispatch(removeTaskAC(taskId, todoId))
