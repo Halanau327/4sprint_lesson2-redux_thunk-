@@ -12,11 +12,11 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {Menu} from '@mui/icons-material';
 import {
-    addTodolistAC, addTodolistTC,
+    addTodolistTC,
     changeTodolistFilterAC,
     changeTodolistTitleAC,
-    FilterValuesType, getTodosThunk,
-    removeTodolistAC, removeTodolistTC,
+    FilterValuesType, getTodolistTC,
+    removeTodolistTC,
     TodolistDomainType
 } from './state(bll)/todolists-reducer'
 import {
@@ -37,7 +37,7 @@ export type TasksStateType = {
 function App() {
 
     useEffect(() => {
-        dispatch(getTodosThunk)
+        dispatch(getTodolistTC())
     }, []);
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)

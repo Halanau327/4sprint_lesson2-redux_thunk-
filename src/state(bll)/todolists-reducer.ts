@@ -1,6 +1,6 @@
 import {todolistsAPI, TodolistType} from '../api(dall)/todolists-api'
 import {Dispatch} from "redux";
-import {AppActionsType} from "./store";
+import {AppActionsType, AppThunk} from "./store";
 
 export type RemoveTodolistActionType = {
     type: 'REMOVE-TODOLIST',
@@ -90,20 +90,19 @@ export const setTodosAC = (todos: TodolistType[]) => ({
     todos
 } as const)
 
-export const getTodosThunk = (dispatch: Dispatch<AppActionsType>) => {
-    todolistsAPI.getTodolists()
-        .then(res => {
-            dispatch(setTodosAC(res.data))
-        })
+export const getTodolistTC = (): AppThunk => async dispatch => {
+    const res = await todolistsAPI.getTodolists()
+    dispatch(setTodosAC(res.data))
 }
-export const addTodolistTC = (title: string) =>  (dispatch: Dispatch<AppActionsType>) => {
+
+export const addTodolistTC = (title: string): AppThunk =>  (dispatch) => {
     todolistsAPI.createTodolist(title)
         .then(res => {
-            dispatch(addTodolistAC(res.data.data.item))
+            dispatch(getTodolistTC())
         })
 }
 
-export const removeTodolistTC = (todolistId: string) =>  (dispatch: Dispatch<AppActionsType>) => {
+export const removeTodolistTC = (todolistId: string): AppThunk =>  (dispatch) => {
     todolistsAPI.deleteTodolist(todolistId)
         .then(res => {
             dispatch(removeTodolistAC(todolistId))
