@@ -48,22 +48,22 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
         case 'ADD-TODOLIST': {
             return [{...action.todolist, filter: 'all' }, ...state];
         }
-        // case 'CHANGE-TODOLIST-TITLE': {
-        //     const todolist = state.find(tl => tl.id === action.id);
-        //     if (todolist) {
-        //         // если нашёлся - изменим ему заголовок
-        //         todolist.title = action.title;
-        //     }
-        //     return [...state]
-        // }
-        // case 'CHANGE-TODOLIST-FILTER': {
-        //     const todolist = state.find(tl => tl.id === action.id);
-        //     if (todolist) {
-        //         // если нашёлся - изменим ему заголовок
-        //         todolist.filter = action.filter;
-        //     }
-        //     return [...state]
-        // }
+        case 'CHANGE-TODOLIST-TITLE': {
+            const todolist = state.find(tl => tl.id === action.id);
+            if (todolist) {
+                // если нашёлся - изменим ему заголовок
+                todolist.title = action.title;
+            }
+            return [...state]
+        }
+        case 'CHANGE-TODOLIST-FILTER': {
+            const todolist = state.find(tl => tl.id === action.id);
+            if (todolist) {
+                // если нашёлся - изменим ему заголовок
+                todolist.filter = action.filter;
+            }
+            return [...state]
+        }
         case "SET_TODOLISTS": {
             return action.todos.map(tl => ({...tl, filter: 'all'}))
         }
@@ -106,6 +106,13 @@ export const removeTodolistTC = (todolistId: string): AppThunk =>  (dispatch) =>
     todolistsAPI.deleteTodolist(todolistId)
         .then(res => {
             dispatch(removeTodolistAC(todolistId))
+        })
+}
+
+export const updateTodolistTitleTC = (todolistId: string, title: string): AppThunk =>  (dispatch) => {
+    todolistsAPI.updateTodolist(todolistId, title)
+        .then(res => {
+            dispatch(changeTodolistTitleAC(todolistId, title))
         })
 }
 
